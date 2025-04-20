@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authService } from "@/services/auth";
 import { withErrorHandler } from "@/lib/utils/route-handler";
-import { HTTP_STATUS } from "@/lib/config/constants";
+import { HTTP_STATUS, TOKENS } from "@/lib/config/constants";
 import { cookies } from "next/headers";
 
-export async function POST(req: NextRequest) {
-  return withErrorHandler(req, async () => {
-    const data = await req.json();
+export async function POST(request: NextRequest) {
+  return withErrorHandler(request, async () => {
+    const data = await request.json();
     const response = await authService.verifyOtp(data);
 
     // Check if we have a successful response
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
       // Set access token cookie
       cookieStore.set({
-        name: "access_token",
+        name: TOKENS.ACCESS,
         value: accessToken,
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
       // Set refresh token cookie
       cookieStore.set({
-        name: "refresh_token",
+        name: TOKENS.REFRESH,
         value: refreshToken,
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",

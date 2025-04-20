@@ -4,11 +4,11 @@ import { handleApiError } from "./api-error-handler";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function withErrorHandler<T>(
-  req: NextRequest,
-  handler: (req: NextRequest) => Promise<T>,
+  request: NextRequest,
+  handler: (request: NextRequest) => Promise<T>,
 ): Promise<NextResponse<ApiResponse>> {
   try {
-    const data = await handler(req);
+    const data = await handler(request);
 
     // If the response is already a NextResponse, return it as is
     if (data instanceof NextResponse) {

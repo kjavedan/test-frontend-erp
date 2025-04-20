@@ -4,7 +4,11 @@ export const API_CONFIG = {
   VERSION: "/api/v1",
 } as const;
 
-// Separate endpoints by feature/module
+export const TOKENS = {
+  ACCESS: "access_token",
+  REFRESH: "refresh_token",
+};
+
 export const ENDPOINTS = {
   AUTH: {
     LOGIN: `${API_CONFIG.VERSION}/user/login`,
@@ -15,7 +19,6 @@ export const ENDPOINTS = {
   },
 } as const;
 
-// HTTP Status Codes
 export const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,
