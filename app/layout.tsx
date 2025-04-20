@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeModeScript } from "flowbite-react";
 import "./globals.css";
+import { Providers } from "@/components/Providers";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,8 +22,10 @@ export default function RootLayout({
       <head>
         <ThemeModeScript />
       </head>
-      <body className={inter.className}>
-        <main>{children}</main>
+      <body className={`${inter.className} antialiased`}>
+        <Providers>
+          <main>{children}</main>
+        </Providers>
         <Toaster position="top-right" />
       </body>
     </html>

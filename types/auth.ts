@@ -14,15 +14,12 @@ export interface VerifyOtpData {
   ipAddress?: string;
 }
 
-export interface UserSession {
-  accessToken: string;
-  refreshToken: string;
-  user: {
-    id: string;
-    email: string;
-    userType: UserType;
-    // Add other user fields as needed
-  };
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  userType: UserType;
+  // Add other user fields as needed
 }
 
 export interface TokenResponse {

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { UserType, VerifyOtpData, UserSession } from "@/types/auth";
+import { UserType, VerifyOtpData } from "@/types/auth";
 import { Button } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";

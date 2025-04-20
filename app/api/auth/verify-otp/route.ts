@@ -34,10 +34,6 @@ export async function POST(req: NextRequest) {
         path: "/",
       });
 
-      // Log the cookies that were set
-      const allCookies = cookieStore.getAll();
-      console.log("Cookies after setting:", allCookies);
-
       // Return a consistent response structure
       return NextResponse.json(
         {
