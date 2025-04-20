@@ -9,6 +9,13 @@ export async function withErrorHandler<T>(
 ): Promise<NextResponse<ApiResponse>> {
   try {
     const data = await handler(req);
+
+    // If the response is already a NextResponse, return it as is
+    if (data instanceof NextResponse) {
+      return data;
+    }
+
+    // Otherwise, wrap the response
     return NextResponse.json(
       { data, status: HTTP_STATUS.OK },
       { status: HTTP_STATUS.OK },
