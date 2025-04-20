@@ -2,7 +2,6 @@
 
 import * as Yup from "yup";
 import Image from "next/image";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -14,13 +13,12 @@ import {
   Select,
 } from "flowbite-react";
 import { LoginFormData } from "@/types/auth";
-import { HTTP_STATUS } from "@/lib/config/constants";
-import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
+import { useAuth } from "@/context/auth";
 
 export function LoginForm() {
-  const router = useRouter();
   const toast = useToast();
+  const { login } = useAuth();
 
   const loginSchema = Yup.object().shape({
     email: Yup.string().email("Invalid Email").required("Email is Required"),
@@ -44,58 +42,11 @@ export function LoginForm() {
     resolver: yupResolver(loginSchema) as any,
   });
 
-  const [serverError, setServerError] = useState("");
-
   const onSubmit = handleSubmit(async (data) => {
     try {
-      setServerError("");
-
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        switch (response.status) {
-          case HTTP_STATUS.UNAUTHORIZED:
-            toast.error(result.error);
-            return;
-          case HTTP_STATUS.FORBIDDEN:
-            toast.error("Password not set");
-            return;
-          case HTTP_STATUS.NOT_FOUND:
-            toast.error(result.error);
-            return;
-          case HTTP_STATUS.LOCKED:
-            const params = new URLSearchParams({
-              email: data.email,
-              userType: data.userType,
-              ipAddress: data.ipAddress || "",
-            });
-            router.push(`/otp?${params.toString()}`);
-            return;
-          default:
-            throw new Error(result.error || "Login failed");
-        }
-      }
-
-      // Create URL parameters from login data
-      const params = new URLSearchParams({
-        email: data.email,
-        userType: data.userType,
-        ipAddress: data.ipAddress || "",
-      });
-
-      // Navigate to OTP page with the data
-      router.push(`/otp?${params.toString()}`);
+      await login(data);
     } catch (err) {
       toast.error("An unexpected error occurred");
-      setServerError(err instanceof Error ? err.message : "Login failed");
     }
   });
 

@@ -33,11 +33,12 @@ export async function POST(req: NextRequest) {
         sameSite: "strict",
         path: "/",
       });
-
+      const allCookies = cookieStore.getAll();
+      console.log("all cookies: ", allCookies);
       // Return a consistent response structure
       return NextResponse.json(
         {
-          data: user,
+          data: { user },
           status: HTTP_STATUS.OK,
         },
         { status: HTTP_STATUS.OK },

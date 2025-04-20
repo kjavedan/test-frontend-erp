@@ -2,13 +2,12 @@
 import { useState } from "react";
 import { UserType, VerifyOtpData } from "@/types/auth";
 import { Button } from "flowbite-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { useToast } from "@/hooks/useToast";
+import { useAuth } from "@/context/auth";
 
-export function EmailVerificationOTPForm() {
-  const router = useRouter();
-  const toast = useToast();
+export function OtpForm() {
+  const { verifyOtp } = useAuth();
 
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
@@ -54,24 +53,13 @@ export function EmailVerificationOTPForm() {
         otp,
       };
 
-      const response = await fetch("/api/auth/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        toast.error(result.error);
-        setError(result.error || "Failed to verify OTP");
-        return;
-      }
-
-      toast.success("Login successful!");
-      router.push("/dashboard");
+      await verifyOtp(formData);
     } catch (error) {
-      setError("An unexpected error occurred");
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -140,7 +128,7 @@ export function EmailVerificationOTPForm() {
                       maxLength={1}
                       value={otp[index] || ""}
                       onChange={(e) => handleOtpChange(index, e.target.value)}
-                      className={`block size-12 rounded-lg border border-gray-300 bg-white py-3 text-center text-2xl font-extrabold text-gray-900 focus:border-ghred-500 focus:ring-ghred-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-ghred-500 dark:focus:ring-ghred-500 sm:size-16 sm:py-4 sm:text-4xl ${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}
+                      className={`block size-12 rounded-lg border bg-white py-3 text-center text-2xl font-extrabold text-gray-900 focus:border-ghred-500 focus:ring-ghred-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-ghred-500 dark:focus:ring-ghred-500 sm:size-16 sm:py-4 sm:text-4xl ${error ? "border-red-500 focus:border-red-500 focus:ring-red-500 dark:border-red-500 dark:focus:border-red-500 dark:focus:ring-red-500" : "border-gray-300 dark:border-gray-600"}`}
                     />
                   </div>
                 ))}
