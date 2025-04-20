@@ -13,12 +13,14 @@ import {
   TextInput,
   Select,
 } from "flowbite-react";
-import { LoginFormData } from "@/app/lib/types/auth";
-import { HTTP_STATUS } from "@/app/lib/config/constants";
+import { LoginFormData } from "@/types/auth";
+import { HTTP_STATUS } from "@/lib/config/constants";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/useToast";
 
 export function LoginForm() {
   const router = useRouter();
+  const toast = useToast();
 
   const loginSchema = Yup.object().shape({
     email: Yup.string().email("Invalid Email").required("Email is Required"),
@@ -29,7 +31,7 @@ export function LoginForm() {
       )
       .required("User type is required"),
     password: Yup.string()
-      .min(6, "Min 6 characters")
+      .min(8, "Min 8 characters")
       .required("Password is required"),
     ipAddress: Yup.string().optional(),
   });
@@ -48,8 +50,7 @@ export function LoginForm() {
     try {
       setServerError("");
 
-      // Make API call to our Next.js API route
-      const response = await fetch("/api/login", {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,21 +63,25 @@ export function LoginForm() {
       if (!response.ok) {
         switch (response.status) {
           case HTTP_STATUS.UNAUTHORIZED:
-            console.error("Incorrect password");
-            break;
+            toast.error(result.error);
+            return;
           case HTTP_STATUS.FORBIDDEN:
-            console.error("Password not set");
-            break;
+            toast.error("Password not set");
+            return;
           case HTTP_STATUS.NOT_FOUND:
-            console.log("/signup");
-            break;
+            toast.error(result.error);
+            return;
           case HTTP_STATUS.LOCKED:
-            console.log("verify email");
-            break;
+            const params = new URLSearchParams({
+              email: data.email,
+              userType: data.userType,
+              ipAddress: data.ipAddress || "",
+            });
+            router.push(`/otp?${params.toString()}`);
+            return;
           default:
             throw new Error(result.error || "Login failed");
         }
-        return;
       }
 
       // Create URL parameters from login data
@@ -88,11 +93,9 @@ export function LoginForm() {
 
       // Navigate to OTP page with the data
       router.push(`/otp?${params.toString()}`);
-      // Handle successful login
-      console.log("Login successful:", result);
     } catch (err) {
+      toast.error("An unexpected error occurred");
       setServerError(err instanceof Error ? err.message : "Login failed");
-      console.log(err);
     }
   });
 

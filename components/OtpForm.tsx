@@ -1,12 +1,14 @@
 "use client";
 import { useState } from "react";
-import { UserType, VerifyOtpData } from "@/app/lib/types/auth";
+import { UserType, VerifyOtpData, UserSession } from "@/types/auth";
 import { Button } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import { useToast } from "@/hooks/useToast";
 
 export function EmailVerificationOTPForm() {
   const router = useRouter();
+  const toast = useToast();
 
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
@@ -18,6 +20,8 @@ export function EmailVerificationOTPForm() {
   const [error, setError] = useState("");
 
   const handleOtpChange = (index: number, value: string) => {
+    if (!/^\d*$/.test(value)) return;
+
     if (value.length > 1) return;
 
     const newOtp = otp.split("");
@@ -50,7 +54,7 @@ export function EmailVerificationOTPForm() {
         otp,
       };
 
-      const response = await fetch("/api/verify-otp", {
+      const response = await fetch("/api/auth/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -59,11 +63,12 @@ export function EmailVerificationOTPForm() {
       const result = await response.json();
 
       if (!response.ok) {
+        toast.error(result.error);
         setError(result.error || "Failed to verify OTP");
         return;
       }
 
-      // Handle successful verification (e.g., redirect to dashboard)
+      toast.success("Login successful!");
       router.push("/dashboard");
     } catch (error) {
       setError("An unexpected error occurred");
@@ -73,7 +78,7 @@ export function EmailVerificationOTPForm() {
   };
 
   return (
-    <section className="bg-white px-4 py-8 dark:bg-gray-900 lg:py-0">
+    <section className="h-dvh bg-white px-4 py-8 dark:bg-gray-900 lg:py-0">
       <div className="lg:flex">
         <div className="hidden w-full max-w-md bg-primary-600 p-12 lg:block lg:h-screen">
           <div className="mb-8 flex items-center space-x-4">
@@ -130,7 +135,8 @@ export function EmailVerificationOTPForm() {
                     </label>
                     <input
                       id={`otp-${index}`}
-                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                       maxLength={1}
                       value={otp[index] || ""}
                       onChange={(e) => handleOtpChange(index, e.target.value)}

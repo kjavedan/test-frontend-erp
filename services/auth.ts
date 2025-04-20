@@ -1,7 +1,7 @@
-import axiosInstance from "@/app/lib/config/api";
-import { ENDPOINTS } from "@/app/lib/config/constants";
+import axiosInstance from "@/lib/config/api";
+import { ENDPOINTS } from "@/lib/config/constants";
 
-import { LoginFormData, VerifyOtpData } from "@/app/lib/types/auth";
+import { LoginFormData, VerifyOtpData } from "@/types/auth";
 
 export const authService = {
   login: async (data: LoginFormData) => {
