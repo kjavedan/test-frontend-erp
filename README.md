@@ -29,13 +29,20 @@ cd test-frontend-erp
 npm install
 ```
 
-3. Run the development server:
+3. Create a `.env` file in the root directory and add the following environment variables from the provided 1Password link:
+
+```bash
+BACKEND_URL=your_backend_url
+BACKEND_API_V1_KEY=your_api_key
+```
+
+4. Run the development server:
 
 ```bash
 npm run dev
 ```
 
-4. Build for production:
+5. Build for production:
 
 ```bash
 npm run build
