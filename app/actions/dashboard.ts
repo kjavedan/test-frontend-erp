@@ -1,8 +1,8 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { dashboardService } from "@/services/dashboard";
 import { TOKENS } from "@/lib/config/constants";
+import { dashboardService } from "@/services/dashboard";
 
 export async function retryDashboardData() {
   const cookieStore = cookies();
