@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
 import { Button } from "flowbite-react";
 import { useAuth } from "@/context/auth";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { UserType, VerifyOtpData } from "@/types/auth";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export function OtpForm() {
   const { verifyOtp } = useAuth();

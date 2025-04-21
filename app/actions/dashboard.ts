@@ -1,0 +1,21 @@
+"use server";
+
+import { cookies } from "next/headers";
+import { dashboardService } from "@/services/dashboard";
+import { TOKENS } from "@/lib/config/constants";
+
+export async function retryDashboardData() {
+  const cookieStore = cookies();
+  const token = cookieStore.get(TOKENS.ACCESS)?.value;
+
+  if (!token) {
+    return { error: "No token found" };
+  }
+
+  try {
+    const data = await dashboardService.getAccountantData(token);
+    return { data };
+  } catch (error) {
+    return { error: "Failed to fetch data" };
+  }
+}
