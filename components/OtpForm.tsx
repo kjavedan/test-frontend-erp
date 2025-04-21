@@ -1,22 +1,30 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "flowbite-react";
 import { useAuth } from "@/context/auth";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { UserType, VerifyOtpData } from "@/types/auth";
 
 export function OtpForm() {
   const { verifyOtp } = useAuth();
-
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "";
-  const userType = (searchParams.get("userType") as UserType) || "root";
+
+  const email = searchParams.get("email");
+  const userType = searchParams.get("userType") as UserType;
   const ipAddress = searchParams.get("ipAddress") || undefined;
 
   const [otp, setOtp] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  // Check for required parameters and redirect if missing
+  useEffect(() => {
+    if (!email || !userType) {
+      router.push("/login");
+    }
+  }, [email, userType, router]);
 
   const handleOtpChange = (index: number, value: string) => {
     if (!/^\d*$/.test(value)) return;
@@ -47,8 +55,8 @@ export function OtpForm() {
       }
 
       const formData: VerifyOtpData = {
-        email,
-        userType,
+        email: email || "",
+        userType: userType || "root",
         ipAddress,
         otp,
       };
@@ -64,6 +72,11 @@ export function OtpForm() {
       setIsSubmitting(false);
     }
   };
+
+  // Don't render the form if required parameters are missing
+  if (!email || !userType) {
+    return null;
+  }
 
   return (
     <section className="h-dvh bg-white px-4 py-8 dark:bg-gray-900 lg:py-0">
