@@ -3,12 +3,13 @@ import type { NextRequest } from "next/server";
 import { TOKENS } from "./lib/config/constants";
 
 // Define public and private routes
-const publicRoutes = ["/login", "/otp"];
+const publicRoutes = ["/login", "/otp", "temp"];
 const privateRoutes = ["/dashboard"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const accessToken = request.cookies.get(TOKENS.ACCESS);
+  const refreshToken = request.cookies.get(TOKENS.REFRESH);
 
   // Check if the route is public
   const isPublicRoute = publicRoutes.some((route) =>
@@ -21,8 +22,12 @@ export function middleware(request: NextRequest) {
   );
 
   // If user is not authenticated and trying to access private route
-  if (!accessToken && isPrivateRoute) {
+  if (!accessToken && !refreshToken && isPrivateRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
+  }
+  // If user session expired and trying to access private route
+  if (!accessToken && refreshToken && isPrivateRoute) {
+    return NextResponse.redirect(new URL("/session-expired", request.url));
   }
 
   // If user is authenticated and trying to access public route

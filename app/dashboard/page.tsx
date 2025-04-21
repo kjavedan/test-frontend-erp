@@ -1,14 +1,31 @@
-"use client";
+import { HTTP_STATUS, TOKENS } from "@/lib/config/constants";
+import { cookies } from "next/headers";
+import { dashboardService } from "@/services/dashboard";
+import DashboardContent from "@/components/DashboardContent";
+import { DashboardAccountantType } from "@/types/dashboard";
 
-import { useAuth } from "@/context/auth";
+import ReloadButton from "@/components/ReloadButton";
+import { redirect } from "next/navigation";
 
-export default function Dashboard() {
-  const { user, isAuthenticated } = useAuth();
+export default async function Dashboard() {
+  const cookieStore = cookies();
+  const token = cookieStore.get(TOKENS.ACCESS)?.value;
 
-  return (
-    <div>
-      <h1>Welcome {user?.name || "User"}</h1>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-    </div>
-  );
+  if (!token) {
+    redirect("/session-expired");
+  }
+
+  try {
+    const data: DashboardAccountantType =
+      await dashboardService.getAccountantData(token);
+    return <DashboardContent {...data} />;
+  } catch (error: any) {
+    if (error?.status === HTTP_STATUS.FORBIDDEN) {
+      return (
+        <div className="!w-full">
+          <ReloadButton />
+        </div>
+      );
+    }
+  }
 }

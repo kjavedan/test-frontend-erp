@@ -159,7 +159,7 @@ export function LoginForm() {
                 disabled={isSubmitting}
                 className="w-full bg-ghred-500 hover:bg-ghred-600"
               >
-                Sign in
+                {isSubmitting ? "signing in..." : "Sign in"}
               </Button>
               <p className="text-sm font-medium text-gray-900 dark:text-white">
                 {" Don't have an account yet? "}

@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         path: "/",
+        maxAge: 15 * 60, // 15 minutes in seconds
       });
 
       // Set refresh token cookie
@@ -32,9 +33,10 @@ export async function POST(request: NextRequest) {
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         path: "/",
+        maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
       });
       const allCookies = cookieStore.getAll();
-      console.log("all cookies: ", allCookies);
+
       // Return a consistent response structure
       return NextResponse.json(
         {

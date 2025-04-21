@@ -65,7 +65,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     const result = await response.json();
-    console.log("🚀 ~ verifyOtp ~ result:", result);
 
     if (!response.ok) {
       toast.error(result.error);
