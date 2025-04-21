@@ -1,6 +1,7 @@
 import { DashboardAccountantType } from "@/types/dashboard";
-import Financials from "./dashboard/blocks/Financials";
+
 import Stats from "./dashboard/blocks/Stats";
+import Financials from "./dashboard/blocks/Financials";
 
 export default function DashboardContent(props: DashboardAccountantType) {
   return (

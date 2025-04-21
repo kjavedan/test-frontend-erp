@@ -1,8 +1,8 @@
 import React from "react";
-import { useCallback } from "react";
 import toast from "react-hot-toast";
-import { Toast } from "@/components/ui/Toast";
+import { useCallback } from "react";
 import { ToastType } from "@/types/ui";
+import { Toast } from "@/components/ui/Toast";
 
 interface ToastOptions {
   duration?: number;

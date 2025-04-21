@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Button } from "flowbite-react";
+import { useRouter } from "next/navigation";
 
 export default function SessionExpiredDialog() {
   const router = useRouter();

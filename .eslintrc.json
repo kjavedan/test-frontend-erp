@@ -4,6 +4,25 @@
     "plugin:tailwindcss/recommended",
     "prettier"
   ],
+  "plugins": ["perfectionist"],
+  "rules": {
+    "perfectionist/sort-imports": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling", "index"],
+          "object",
+          "type"
+        ],
+        "newlinesBetween": "always",
+        "type": "line-length",
+        "order": "asc"
+      }
+    ]
+  },
   "settings": {
     "tailwindcss": {
       "callees": ["twMerge", "createTheme"],

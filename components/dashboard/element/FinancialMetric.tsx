@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useId } from "react";
 import ApexCharts from "apexcharts";
+import { useEffect, useId } from "react";
 import { formatNumber } from "@/lib/utils/format";
 
 export default function FinancialMetric(props: {
@@ -104,7 +104,8 @@ export default function FinancialMetric(props: {
         chart.destroy();
       }
     };
-  }, [chartId]); // Add chartId to dependencies
+    //eslint-disable-next-line
+  }, [chartId]);
 
   return (
     <div className="relative w-full max-w-sm  border-r border-solid border-r-gray-100 bg-white p-4 dark:border-r-gray-700  dark:bg-gray-800">

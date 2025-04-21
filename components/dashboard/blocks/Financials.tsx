@@ -1,4 +1,5 @@
 import { FinancialsType } from "@/types/dashboard";
+
 import FinancialMetric from "../element/FinancialMetric";
 import FinancialProfitDistribution from "../element/FinancialProfitDistribution";
 

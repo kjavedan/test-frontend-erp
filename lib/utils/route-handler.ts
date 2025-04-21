@@ -1,7 +1,8 @@
-import { HTTP_STATUS } from "../config/constants";
 import { ApiResponse } from "@/types/api";
-import { handleApiError } from "./api-error-handler";
 import { NextRequest, NextResponse } from "next/server";
+
+import { HTTP_STATUS } from "../config/constants";
+import { handleApiError } from "./api-error-handler";
 
 export async function withErrorHandler<T>(
   request: NextRequest,

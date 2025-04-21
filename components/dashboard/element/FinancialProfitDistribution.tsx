@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useId } from "react";
 import ApexCharts from "apexcharts";
+import { useEffect, useId } from "react";
 import { formatNumber } from "@/lib/utils/format";
 import { FinancialsType } from "@/types/dashboard";
 
@@ -189,6 +189,7 @@ export default function FinancialProfitDistribution(props: FinancialsType) {
         chart.destroy();
       }
     };
+    //eslint-disable-next-line
   }, [chartId]);
 
   return (

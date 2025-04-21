@@ -2,7 +2,10 @@
 
 import * as Yup from "yup";
 import Image from "next/image";
+import { useAuth } from "@/context/auth";
 import { useForm } from "react-hook-form";
+import { useToast } from "@/hooks/useToast";
+import { LoginFormData } from "@/types/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
@@ -12,9 +15,6 @@ import {
   TextInput,
   Select,
 } from "flowbite-react";
-import { LoginFormData } from "@/types/auth";
-import { useToast } from "@/hooks/useToast";
-import { useAuth } from "@/context/auth";
 
 export function LoginForm() {
   const toast = useToast();

@@ -1,4 +1,5 @@
 import { StatsType } from "@/types/dashboard";
+
 import StatMetric from "../element/StatMetric";
 
 export default function Stats(props: StatsType) {

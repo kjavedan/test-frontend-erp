@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { authService } from "@/services/auth";
+import { NextRequest, NextResponse } from "next/server";
 import { withErrorHandler } from "@/lib/utils/route-handler";
 import { HTTP_STATUS, TOKENS } from "@/lib/config/constants";
-import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
   return withErrorHandler(request, async () => {

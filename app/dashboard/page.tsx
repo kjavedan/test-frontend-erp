@@ -1,11 +1,10 @@
-import { HTTP_STATUS, TOKENS } from "@/lib/config/constants";
 import { cookies } from "next/headers";
-import { dashboardService } from "@/services/dashboard";
-import DashboardContent from "@/components/DashboardContent";
-import { DashboardAccountantType } from "@/types/dashboard";
-
-import ReloadButton from "@/components/ReloadButton";
 import { redirect } from "next/navigation";
+import ReloadButton from "@/components/ReloadButton";
+import { dashboardService } from "@/services/dashboard";
+import { DashboardAccountantType } from "@/types/dashboard";
+import { HTTP_STATUS, TOKENS } from "@/lib/config/constants";
+import DashboardContent from "@/components/DashboardContent";
 
 export default async function Dashboard() {
   const cookieStore = cookies();

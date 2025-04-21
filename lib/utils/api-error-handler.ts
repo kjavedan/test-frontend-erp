@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
+import { ApiResponse } from "@/types/api";
 import { NextResponse } from "next/server";
 import { HTTP_STATUS } from "@/lib/config/constants";
-import { ApiResponse } from "@/types/api";
 
 export function handleApiError(error: unknown): NextResponse<ApiResponse> {
   if (!(error instanceof AxiosError)) {
