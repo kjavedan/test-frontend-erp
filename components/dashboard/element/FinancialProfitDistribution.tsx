@@ -1,6 +1,5 @@
 "use client";
 
-import ApexCharts from "apexcharts";
 import { useEffect, useId } from "react";
 import { formatNumber } from "@/lib/utils/format";
 import { FinancialsType } from "@/types/dashboard";
@@ -11,6 +10,26 @@ type DistributionData = {
   value: number;
   color: string;
   icon: React.ReactNode;
+};
+
+// Create a client-side only wrapper for ApexCharts
+const Chart = ({ chartId, options }: { chartId: string; options: any }) => {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const ApexCharts = require("apexcharts");
+    const element = document.getElementById(chartId);
+    if (element) {
+      const chart = new ApexCharts(element, options);
+      chart.render();
+
+      return () => {
+        chart.destroy();
+      };
+    }
+  }, [chartId, options]);
+
+  return <div id={chartId} />;
 };
 
 export default function FinancialProfitDistribution(props: FinancialsType) {
@@ -24,7 +43,7 @@ export default function FinancialProfitDistribution(props: FinancialsType) {
       color: "#1C64F2",
       icon: (
         <svg
-          className="size-5 "
+          className="size-5"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -173,25 +192,6 @@ export default function FinancialProfitDistribution(props: FinancialsType) {
     },
   };
 
-  useEffect(() => {
-    let chart: ApexCharts | undefined;
-
-    if (typeof window !== "undefined") {
-      const element = document.getElementById(chartId);
-      if (element) {
-        chart = new ApexCharts(element, options);
-        chart.render();
-      }
-    }
-
-    return () => {
-      if (chart) {
-        chart.destroy();
-      }
-    };
-    //eslint-disable-next-line
-  }, [chartId]);
-
   return (
     <div className="w-full min-w-[350px] p-4">
       <div className="mb-2 grid grid-cols-3 gap-4">
@@ -199,7 +199,7 @@ export default function FinancialProfitDistribution(props: FinancialsType) {
           <div key={item.label} className="flex flex-col items-start">
             <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
               <span>{item.icon}</span>
-              <span className="text-sm ">{item.label}</span>
+              <span className="text-sm">{item.label}</span>
             </div>
             <div>
               <div className="flex items-center gap-1">
@@ -216,7 +216,7 @@ export default function FinancialProfitDistribution(props: FinancialsType) {
       </div>
       {!(!props.revenue && !props.expenses && !props.stockValue) && (
         <>
-          <div id={chartId}></div>
+          <Chart chartId={chartId} options={options} />
           <div className="mt-2 flex items-center justify-center gap-4">
             {data.map((item) => (
               <div key={item.label} className="flex items-center gap-1">

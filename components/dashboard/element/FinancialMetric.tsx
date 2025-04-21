@@ -1,15 +1,33 @@
 "use client";
 
-import ApexCharts from "apexcharts";
 import { useEffect, useId } from "react";
 import { formatNumber } from "@/lib/utils/format";
+
+// Create a client-side only wrapper for ApexCharts
+const Chart = ({ chartId, options }: { chartId: string; options: any }) => {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const ApexCharts = require("apexcharts");
+    const element = document.getElementById(chartId);
+    if (element) {
+      const chart = new ApexCharts(element, options);
+      chart.render();
+
+      return () => {
+        chart.destroy();
+      };
+    }
+  }, [chartId, options]);
+
+  return <div id={chartId} />;
+};
 
 export default function FinancialMetric(props: {
   label: string;
   value: number;
   growth: string;
 }) {
-  // Generate a unique ID for each chart instance
   const chartId = useId();
 
   const options = {
@@ -87,28 +105,8 @@ export default function FinancialMetric(props: {
     },
   };
 
-  useEffect(() => {
-    let chart: ApexCharts | undefined;
-
-    if (typeof window !== "undefined") {
-      const element = document.getElementById(chartId);
-      if (element) {
-        chart = new ApexCharts(element, options);
-        chart.render();
-      }
-    }
-
-    // Cleanup function to destroy chart on unmount
-    return () => {
-      if (chart) {
-        chart.destroy();
-      }
-    };
-    //eslint-disable-next-line
-  }, [chartId]);
-
   return (
-    <div className="relative w-full max-w-sm  border-r border-solid border-r-gray-100 bg-white p-4 dark:border-r-gray-700  dark:bg-gray-800">
+    <div className="relative w-full max-w-sm border-r border-solid border-r-gray-100 bg-white p-4 dark:border-r-gray-700 dark:bg-gray-800">
       <div className="flex justify-between">
         <div>
           <p className="text-base font-normal text-gray-500 dark:text-gray-400">
@@ -139,7 +137,7 @@ export default function FinancialMetric(props: {
           {props.value ? props.growth : 0}%
         </div>
       </div>
-      {!!props.value && <div id={chartId}></div>}
+      {!!props.value && <Chart chartId={chartId} options={options} />}
     </div>
   );
 }
