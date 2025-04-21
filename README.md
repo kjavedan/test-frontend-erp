@@ -1,5 +1,46 @@
 # Garage Hero Frontend Test
 
+## Live Demo
+
+**Live URL:** [https://test-frontend-erp.vercel.app/](https://test-frontend-erp.vercel.app/login)
+
+**Repository:** [https://github.com/kjavedan/test-frontend-erp.git](https://github.com/kjavedan/test-frontend-erp.git)
+
+## Project Status
+
+✅ Authentication Flow (Login & OTP Verification) - Completed
+✅ Dashboard UI Implementation - Completed
+✅ API Integration - Completed
+✅ Charts Implementation - Completed
+⏳ Invoices Table UI - Pending (Time constraints)
+
+## Local Setup Instructions
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/kjavedan/test-frontend-erp.git
+cd test-frontend-erp
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Run the development server:
+
+```bash
+npm run dev
+```
+
+4. Build for production:
+
+```bash
+npm run build
+```
+
 ## Objective
 
 The goal of this test is to evaluate your ability to integrate pre-built components, work with backend APIs, and design a functional dashboard from scratch using [Flowbite React](https://flowbite-react.com/).
